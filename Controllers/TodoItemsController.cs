@@ -51,6 +51,16 @@ public class TodoItemsController : ControllerBase
         }
         return todoItem;
     }
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteTodoItem(long id) {
+        var todoItem = await _context.TodoItems.FindAsync(id);
+        if (todoItem == null) return NotFound();
+
+        _context.TodoItems.Remove(todoItem);
+        await _context.SaveChangesAsync();
+
+        return StatusCode(200);
+    }
     private bool TodoItemExists(long id) {
         return _context.TodoItems.Any(e => e.Id.Equals(id));
     }
